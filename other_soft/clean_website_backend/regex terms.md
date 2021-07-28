@@ -116,3 +116,27 @@
     
 
 </table>
+
+
+<table style="width:100%">
+    <tr>
+        <td colspan="2" align="center"><strong>source</strong></td>
+    </tr>
+    <tr>
+        <td colspan="2">Files Added: admin-custom-forms.php, includes/custom-forms/form-builder.php, includes/custom-forms/form-builder.css, includes/custom-forms/form-builder.js, includes/custom-forms/form-builder-helper.php, includes/custom-forms/gh-button.css, includes/custom-forms/gh-icons.pngnkjnkj</td>
+    </tr>
+    <tr>
+        <th>regex</th>
+        <th colspan="2">result</th>
+    </tr>
+    <tr>
+        <td>.*((?<= ).*\.(?:jpg|gif|png|jpeg))</td>
+        <td>includes/custom-forms/gh-icons.png</td>
+    </tr>
+    <tr>
+        <td>([^\/]*.(?:jpg|gif|png|jpeg))</td>
+        <td>gh-icons.png</td>
+    </tr>
+    
+
+</table>

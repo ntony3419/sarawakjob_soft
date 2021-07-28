@@ -1,8 +1,8 @@
 import os
-import shutil
+
 import time
 import traceback
-import chardet
+
 from chardet.universaldetector import UniversalDetector
 ''' this function take in a folder and will loop through all the FILE in that folder (except sub directory) and seach the keyword content'''
 def search_file_contain_keyword(folder, keyword):

@@ -36,7 +36,7 @@ class directory():
             f.close()
         except:
             err=traceback.format_exc()
-            print(err)
+            # print(err)
 
     def pixel_resize(self, image_path, size):
         path_no_extension = os.path.splitext(image_path)[0]
@@ -51,7 +51,7 @@ class directory():
             result: file is copy to new location and create similar structure ( ex: C:/temp/upload/2014/image.jpg)
             
     '''
-    def copy(self, new_location, file_path):
+    def copy(self, file_path,new_location):
         try:
             #make dirs
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -75,29 +75,29 @@ class directory():
             if file_name in files:
                 result.append(os.path.join(root, file_name))
         '''many file with same file name is found'''
-        location = None
-        for path in result:  # if same file name in multiple location
-            #convert the '\\' in value of each path to '/' so that the re can match correctly
-            new_file_path= None
-            try:
-                #new_file_path = path.replace("\\","/") #relative path of the file use / for directory so create a new_file_path using / from path for conviniene search
-                new_file_path = path.replace("/",
-                                             "\\")  # relative path of the file use / for directory so create a new_file_path using / from path for conviniene search
-            except:
-                pass
-            syntax = None
-            ''' regex syntax :
-                source : '\'https://duplicatedemo.notesquare.com/assets/2012/10/13.jpg\''
-                regex : .*(http.*[assets$]).*
-                result : https://duplicatedemo.notesquare.com/assets
-            '''
-            if re.match(".*(http.*[assets$]).*", file_rel_path) is not None:
-                    syntax = "(?<=uploads).*\.(?:jpg|gif|png)"
-            else:
-                syntax = r".*{}.*".format(file_rel_path) #syntax to match relative path of file (file_rel_path) to portion of MODIFIED absolution path (new_file_path)
-            if re.match(syntax,new_file_path) is not None:
-                location = path
-        return location
+        # location = None
+        # for path in result:  # if same file name in multiple location
+        #     #convert the '\\' in value of each path to '/' so that the re can match correctly
+        #     new_file_path= None
+        #     try:
+        #         #new_file_path = path.replace("\\","/") #relative path of the file use / for directory so create a new_file_path using / from path for conviniene search
+        #         new_file_path = path.replace("/",
+        #                                      "\\")  # relative path of the file use / for directory so create a new_file_path using / from path for conviniene search
+        #     except:
+        #         pass
+        #     syntax = None
+        #     ''' regex syntax :
+        #         source : '\'https://duplicatedemo.notesquare.com/assets/2012/10/13.jpg\''
+        #         regex : .*(http.*[assets$]).*
+        #         result : https://duplicatedemo.notesquare.com/assets
+        #     '''
+        #     if re.match(".*(http.*[assets$]).*", file_rel_path) is not None:
+        #             syntax = "(?<=uploads).*\.(?:jpg|gif|png)"
+        #     else:
+        #         syntax = r".*{}.*".format(file_rel_path) #syntax to match relative path of file (file_rel_path) to portion of MODIFIED absolution path (new_file_path)
+        #     if re.match(syntax,new_file_path) is not None:
+        #         location = path
+        return result
 
 
     # def absolute_path(self, search_location, file_rel_path):

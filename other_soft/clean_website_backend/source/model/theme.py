@@ -17,6 +17,7 @@ class theme():
         f.close()
 
         '''main algorithm'''
+        temp_location = os.path.join(theme_folder, "sjobs_new")
         for root, subdir , files in os.walk(theme_folder):
             for file in files:
                 #if file.endswith(".php"):
@@ -29,10 +30,15 @@ class theme():
                                 if len(tup_item) !=0:
                                     #print(tup_item)
                                     image_relative_path =tup_item[0][0]
-                                    abs_path = tup_item[1]
-                                    print(image_relative_path, ",", abs_path)
+                                    abs_path_list = tup_item[1]
+                                    # print("result: ", image_relative_path, ",", abs_path_list)
+
                                     '''TODO: copy abs_path image to a temp location with similar structure'''
-                                    self.dir.copy(r"C:\Users\quang nguyen\PycharmProjects\python\sarawakjob_soft\other_soft\clean_website_backend",abs_path)
+                                    if len(abs_path_list)!=0:
+                                        regex = r"{}".format(theme_folder)
+                                        second_part = re.findall(regex, abs_path_list)
+                                        new_file_abs_path = os.path.join(temp_location,second_part)
+                                        self.dir.copy(abs_path_list[0],temp_location)
 
                     except:
                         err = traceback.format_exc()
@@ -51,8 +57,7 @@ class theme():
                                      image_rel_path[0])[0]  # only get file name and its extension
                 abs_path= self.dir.absolute_path(folder, image_rel_path[0].strip())
 
-                ''' attempt to write to file for manual check'''
-                self.append_to_file([image_rel_path[0], row, abs_path, file_path] )
+                # print(f"testing abs_path {abs_path}")
             except:
                 err = traceback.format_exc()
                 pass

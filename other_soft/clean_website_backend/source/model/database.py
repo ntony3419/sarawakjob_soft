@@ -51,10 +51,12 @@ class database():
         try:
             image_name = re.findall("([^\/]*.(?:jpg|gif|png|jpeg))", image_url)[0]
         except:
-            print(f"issue with extracting image name: \n"
-                  f"statement :  image_name=re.findall('([^\/]*.(?:jpg|gif|png|jpeg))', image_url)[0]\n"
-                  f"source: {image_url}"
-                                                                    )
+            err=traceback.format_exc()
+            err_msg=f"issue with extracting image name: \nstatement :  image_name=re.findall('([^\/]*.(?:jpg|gif|png|jpeg))', image_url)[0]\nsource: {image_url}"
+            # print(f"issue with extracting image name: \n"
+            #       f"statement :  image_name=re.findall('([^\/]*.(?:jpg|gif|png|jpeg))', image_url)[0]\n"
+            #       f"source: {image_url}"
+            #                                                         )
         return image_name
 
 
@@ -142,8 +144,9 @@ class database():
                                       "user_image_url": info[18].replace("'",""), "file_contain_image_url": sql_file, "source_row": row}
                         yield user_image
                     except Exception as err:
-                        print(
-                            f"error in extracting image using user id: {err.__traceback__}\nworking on value data: {info}\n maybe that row doesn't have image information")
+                        err_msg =f"error in extracting image using user id: {err.__traceback__}\nworking on value data: {info}\n maybe that row doesn't have image information"
+                        # print(
+                        #     f"error in extracting image using user id: {err.__traceback__}\nworking on value data: {info}\n maybe that row doesn't have image information")
     '''Description: call user_image_from_sql_file() to get the infor of image associate with user in multiple sql files
         data will be : (user_id, user_image, user_image_url)
     '''
@@ -177,7 +180,8 @@ class database():
                         user_image = {"user_id": info[1], "user_image_name": info[11], "user_image_url": info[18] }
                         yield user_image
                     except Exception as err:
-                        print(f"error in extracting image using user id: {err.__traceback__}\nworking on value data: {info}")
+                        err_msg=f"error in extracting image using user id: {err.__traceback__}\nworking on value data: {info}"
+                        # print(f"error in extracting image using user id: {err.__traceback__}\nworking on value data: {info}")
 
 
     ''' all the images in database generator 
@@ -236,12 +240,8 @@ class database():
                 if os.path.splitext(img_relative_path_window)[1] in ('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif'):
                     img_name = re.findall(r"([^\\]*.(?:jpg|gif|png|jpeg))", img_relative_path_window)[0]
             except:
-                print("\nIssue in filter_image-used_by_job_post: \n{}other details\n"
-                      "statement: img_name = re.findall(r'([^\\]*.(?:jpg|gif|png|jpeg))', img_relative_path_window)[0]\n"
-                      "source: {}\n"
-                      "source type: {}\n"
-                      "regex result : {}".format(traceback.format_exc(),img_relative_path_window,type(img_relative_path_window),re.findall(r'([^\\]*.(?:jpg|gif|png|jpeg))', img_relative_path_window)))
-                print(img_relative_path_window)
+                err_msg= "\nIssue in filter_image-used_by_job_post: \n{}other details\nstatement: img_name = re.findall(r'([^\\]*.(?:jpg|gif|png|jpeg))', img_relative_path_window)[0]\nsource: {}\nsource type: {}\nregex result : {}".format(traceback.format_exc(),img_relative_path_window,type(img_relative_path_window),re.findall(r'([^\\]*.(?:jpg|gif|png|jpeg))', img_relative_path_window))
+                #print(img_relative_path_window)
             #use img_relative_path_window to find the image location
             for root, subdir, files in os.walk(images_folder):
                 for file in files:
@@ -253,32 +253,33 @@ class database():
                         temp_upload_folder = os.path.join(os.path.dirname(temp_upload_folder), r"uploads_new")
                         if os.path.exists(temp_upload_folder) is False:
                             os.makedirs(temp_upload_folder)
-                        print(temp_upload_folder)
+                        # print(temp_upload_folder)
 
                         # start copy
                         file_dest = os.path.join(temp_upload_folder,
                                                  img_relative_path_window)  # result ex:  D:\sarawakjobs\duplicatedemo.notesquare.com_origin\duplicatedemo.notesquare.com_edit\wp-content\uploads_new\company_logos\2021\07\Test-1-employer.jpg'
                         dest_folder = re.findall(r"([a-zA-Z]:\\.*?\\)((?:[^\\]|\\\/)+?)(?:(?<!\\)\s|$)", file_dest)[0][
                             0]  # result ex:D:\sarawakjobs\duplicatedemo.notesquare.com_origin\duplicatedemo.notesquare.com_edit\wp-content\uploads_new\company_logos\2021\07\
-                        print(dest_folder)
+                        # print(dest_folder)
                         # print(type(dest_folder))
                         if os.path.exists(dest_folder) is False:
                             os.makedirs(dest_folder)
                         try:
                             shutil.copy(image_abs_path, file_dest)
                         except shutil.SameFileError:
-                            print("same file same path was copied")
+                            err = traceback.format_exc()
+                            #print("same file same path was copied")
                         except:
                             err = traceback.format_exc()
-                            print(err)
-            '''for manual testing'''
-            parrent_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            save_to_file = f"{parrent_folder}\\job_image.csv"
-            self.dir.append_to_file(save_to_file,
-                               [image_info["image_id"], image_info["image_relative_path"],
-                                image_info["image_relative_path"],
-                                image_info["source_row"],
-                                image_info["img_abs_path"], image_info["file_use_image"]])
+                            #print(err)
+            # '''for manual testing'''
+            # parrent_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            # save_to_file = f"{parrent_folder}\\job_image.csv"
+            # self.dir.append_to_file(save_to_file,
+            #                    [image_info["image_id"], image_info["image_relative_path"],
+            #                     image_info["image_relative_path"],
+            #                     image_info["source_row"],
+            #                     image_info["img_abs_path"], image_info["file_use_image"]])
 
 
     def find_feature_image_in_sql(self ,sql_folder,codec):
@@ -302,13 +303,13 @@ class database():
         for image_all_data in self.find_user_image_data_multi_sql(   images_folder,sql_folder):
             # image_all_data_list = list(db.find_user_image_data_multi_sql(r"D:\sarawakjobs\duplicatedemo.notesquare.com_origin\duplicatedemo.notesquare.com_edit",r"D:\sarawakjobs\duplicatedemo.notesquare.com_origin\folder hold database files"))
             # for image_all_data in image_all_data_list:
-            print(image_all_data)
+            # print(image_all_data)
             found_image_url = image_all_data["user_image_url"]
             relative_path = re.findall(".*((?<=assets\/).*\.(?:jpg|gif|png|jpeg))", found_image_url)[0]
-            print(relative_path)
+            # print(relative_path)
             # convert_relative_path to window path
             window_format_relative_path = relative_path.replace("/", "\\")
-            print(window_format_relative_path)
+            # print(window_format_relative_path)
             # find the image in the upload folder
             for root, subdirs, files in os.walk(images_folder):
                 for file in files:
@@ -318,24 +319,24 @@ class database():
                     img_200_path = self.generate_other_img_size(original_img_file_path,"200x200")
 
                     if window_format_relative_path in original_img_file_path:
-                        print("original iamge path ", original_img_file_path)
-                        if img_100_path is not None:
-                            print(img_100_path)
-                        if img_200_path is not None:
-                            print(img_200_path)
+                        #print("original iamge path ", original_img_file_path)
+                        # if img_100_path is not None:
+                        #     print(img_100_path)
+                        # if img_200_path is not None:
+                        #     print(img_200_path)
                         # copy this to the temp
                         temp_upload_folder = re.findall(".*([a-zA-Z]:.+?(?<=uploads)).*", original_img_file_path)[0]
                         temp_upload_folder = os.path.join(os.path.dirname(temp_upload_folder), r"uploads_new")
                         if os.path.exists(temp_upload_folder) is False:
                             os.makedirs(temp_upload_folder)
-                        print(temp_upload_folder)
+                        # print(temp_upload_folder)
 
                         # start copy
                         file_dest = os.path.join(temp_upload_folder,
                                                  window_format_relative_path)  # result ex:  D:\sarawakjobs\duplicatedemo.notesquare.com_origin\duplicatedemo.notesquare.com_edit\wp-content\uploads_new\company_logos\2021\07\Test-1-employer.jpg'
                         dest_folder = re.findall(r"([a-zA-Z]:\\.*?\\)((?:[^\\]|\\\/)+?)(?:(?<!\\)\s|$)", file_dest)[0][
                             0]  # result ex:D:\sarawakjobs\duplicatedemo.notesquare.com_origin\duplicatedemo.notesquare.com_edit\wp-content\uploads_new\company_logos\2021\07\
-                        print(dest_folder)
+                        # print(dest_folder)
                         # print(type(dest_folder))
                         if os.path.exists(dest_folder) is False:
                             os.makedirs(dest_folder)
@@ -346,18 +347,19 @@ class database():
                             if os.path.exists(img_200_path) is True:
                                 shutil.copy(img_100_path, file_dest)
                         except shutil.SameFileError:
-                            print("same file same path was copied")
+                            err = traceback.format_exc()
+                            # print("same file same path was copied")
                         except:
                             err = traceback.format_exc()
-                            print(err)
+                            # print(err)
 
             '''for manual testing'''
-            parrent_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            save_to_file = f"{parrent_folder}\\user_image_data.csv"
-            self.dir.append_to_file(save_to_file,
-                               [image_all_data["user_id"], image_all_data["user_name"], image_all_data["user_image_name"],
-                                image_all_data["user_image_url"], image_all_data["source_row"],
-                                image_all_data["image_location"], image_all_data["file_using_image"]])
+            # parrent_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            # save_to_file = f"{parrent_folder}\\user_image_data.csv"
+            # self.dir.append_to_file(save_to_file,
+            #                    [image_all_data["user_id"], image_all_data["user_name"], image_all_data["user_image_name"],
+            #                     image_all_data["user_image_url"], image_all_data["source_row"],
+            #                     image_all_data["image_location"], image_all_data["file_using_image"]])
 
     def generate_other_img_size(self, original_img_path, new_size):
         new_image_size_path= None

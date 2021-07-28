@@ -2,8 +2,8 @@ import re
 import shutil
 import traceback
 
-from other_soft.clean_website_backend.source.model.database import database
-from other_soft.clean_website_backend.source.model.directory import directory
+from source.model.database import database
+from source.model.directory import directory
 import os
 db = database()
 dir = directory()

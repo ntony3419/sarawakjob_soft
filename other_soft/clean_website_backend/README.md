@@ -1,4 +1,48 @@
 
+<h1>How to build</h1>
+<p>1. Make sure pyinstaller is installed. If not install using 
+   
+<pre>
+pip install pyinstaller
+</pre>
+2. Change directory to .py to create .exe
+3. use template "pyinstaller --onefile pythonFile.py"  to create the executable: 
+```python 
+   pyinsstaller --onefile main.py
+   ```
+Extra: If the executable file open a command prompt, rebuild the program again with '-w' option
+<pre>
+pyinstaller --onefile -w main.py
+</pre>
+</p>
+<p>ERROR: If there is error when execute .exe. Find the file main.spec (located in same location as main.py)</p>
+<p>Modified</p>
+<pre>a = Analysis(['main.py'],
+             pathex=['C:\\Users\\quang nguyen\\PycharmProjects\\python\\sarawakjob_soft\\other_soft\\clean_website_backend'],
+             binaries=[],
+             datas=[],
+             hiddenimports=[],
+             hookspath=[],
+             runtime_hooks=[],
+             excludes=[],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher,
+             noarchive=False)</pre>
+<p>To:
+<pre>a = Analysis(['main.py'],
+             pathex=['C:\\ProgramData\\Anaconda3\\Lib', 'C:\\Users\\quang nguyen\\PycharmProjects\\python\\sarawakjob_soft\\other_soft\\clean_website_backend','C:\\Users\\quang nguyen\\PycharmProjects\\python\\sarawakjob_soft','C:\\ProgramData\\Anaconda3\\Lib\\site-packages'],
+             binaries=[],
+             datas=[],
+             hiddenimports=['tkiner.messagebox'],
+             hookspath=[],
+             runtime_hooks=[],
+             excludes=[],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher,
+             noarchive=False)</pre></p>
+
 
 <h1>Feature:</h1>
 <h2> Manual mode </h2>
