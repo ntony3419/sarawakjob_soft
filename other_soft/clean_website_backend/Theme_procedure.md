@@ -1,5 +1,6 @@
 1. find image initial path by using regex
-<pre>regex: ([/|.|\w|\s|-])*\.(?:jpg|gif|png)
+<pre>regex: (([\/|.|\w|\s|-])*\.(?:jpg|gif|png))
+    or regex: (([\\\/|\w|\s|-])*\.(?:jpg|gif|png)) (this one better)
 case: 14:39:39', '', 0, 'https://duplicatedemo.notesquare.com/assets/2014/02/test_image_3.jpg', 0,
 result: //duplicatedemo.notesquare.com/assets/2014/02/test_image_3.jpg
 case: https://duplicatedemo.notesquare.com/assets/2014/02/test_image_3.jpg 
