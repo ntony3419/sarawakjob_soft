@@ -3,7 +3,7 @@ import os
 import traceback
 import re
 from other_soft.clean_website_backend.source.model.directory import directory
-
+import tkinter.messagebox
 
 class theme():
     def __init__(self):
@@ -42,6 +42,7 @@ class theme():
 
                     except:
                         err = traceback.format_exc()
+                        tkinter.messagebox.showerror("Error", f"some error 6{err}")
                         pass
     def find_image(self, folder, file_path):
         codec = directory().determine_codec(file_path)
@@ -55,11 +56,12 @@ class theme():
                 '''attempt to find absolute path of image'''
                 file_name = re.findall("([^\/]+\.(?:jpg|gif|png))",
                                      image_rel_path[0])[0]  # only get file name and its extension
-                abs_path= self.dir.absolute_path(folder, image_rel_path[0].strip())
+                abs_path= self.dir.image_absolute_path(folder, image_rel_path[0].strip())
 
                 # print(f"testing abs_path {abs_path}")
             except:
                 err = traceback.format_exc()
+                tkinter.messagebox.showerror("Error", f"some error 5{err}")
                 pass
 
             yield image_rel_path, abs_path

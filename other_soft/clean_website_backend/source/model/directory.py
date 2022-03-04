@@ -2,7 +2,7 @@ import csv
 import os
 import re
 import traceback
-
+import tkinter.messagebox
 from chardet.universaldetector import UniversalDetector
 import shutil
 class directory():
@@ -36,6 +36,7 @@ class directory():
             f.close()
         except:
             err=traceback.format_exc()
+            tkinter.messagebox.showerror("Error", f"some error 7{err}")
             # print(err)
 
     def pixel_resize(self, image_path, size):
@@ -54,23 +55,37 @@ class directory():
     def copy(self, file_path,new_location):
         try:
             #make dirs
-            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            test= os.path.dirname(new_location)
+            os.makedirs(os.path.dirname(new_location), exist_ok=True)
             #copy
-            shutil.copy(file_path,new_location)
+            if os.path.exists(file_path) is True:
+                shutil.copy(file_path,new_location)
+        except shutil.SameFileError:
+            pass
         except:
             err= traceback.format_exc()
+            tkinter.messagebox.showerror("Error", f"some error 9{err}")
             pass
-
-    '''input : search_location, file_rel_path, file_name
-        Description: search_location is the folder that might contain the image (format: C:/theme/upload/)
-                    file_rel_path is the relative p[ath of the file ( format: /image/up/file.jpg
-                    file_name is the file name to search (format: file.jpg
-    '''
-    def absolute_path(self, search_location, file_rel_path):
+    def resume_absolute_path(self,search_location,file_rel_path):
         result = []
 
         # Wlaking top-down from the root
-        file_name = re.findall("([^\/]*.(?:jpg|gif|png))", file_rel_path)[0]
+        file_name = re.findall("([^\/]*.(?:pdf|doc|docx))", file_rel_path)[0]
+        for root, dir, files in os.walk(search_location):
+            if file_name in files:
+                result.append(os.path.join(root, file_name))
+
+        return result
+
+    '''input : search_location, file_rel_path, file_name
+        Description: search_location is the folder that might contain the image (format: C:/theme/upload/)
+                    file_rel_path is the relative p[ath of the file ( format: /image/up/file.jpg                    
+    '''
+    def image_absolute_path(self, search_location, file_rel_path):
+        result = []
+
+        # Wlaking top-down from the root
+        file_name = re.findall("([^\/]*.(?:jpg|gif|png|jpeg|webp|svg))", file_rel_path)[0]
         for root, dir, files in os.walk(search_location):
             if file_name in files:
                 result.append(os.path.join(root, file_name))

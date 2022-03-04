@@ -4,11 +4,65 @@ import csv
 import os
 import re
 import shutil
+import pymysql
 from other_soft.clean_website_backend.source.model.directory import directory
+import other_soft.clean_website_backend.source.model.global_vars as global_vars
+import tkinter.messagebox
 class database():
     def __init__(self):
         self.dir = directory()
 
+
+    def extract_image_data(self):
+        con = None
+        try:
+            con = pymysql.connect(host="localhost", database=global_vars.database_name, user="root", passwd="")
+        except:
+            tkinter.messagebox.showerror("unable to connect to database. Check the SQL server or database name to match")
+        c = con.cursor(pymysql.cursors.DictCursor)
+        query = '''
+                   SELECT
+                   *
+                   FROM
+                   wp_posts i
+                   WHERE i.post_type = 'attachment'            
+                   
+
+                 '''
+#AND i.post_mime_type LIKE Concat('%', 'image','%')
+        c.execute(query)
+        # data = c.fetchmany(1000)
+        # print(data)
+        for row in c.fetchall():
+            yield (row)
+        c.close()
+        con.close()
+
+    def extract_resume_data(self):
+        con = None
+        try:
+            con = pymysql.connect(host="localhost", database=global_vars.database_name, user="root", passwd="")
+        except:
+            tkinter.messagebox.showerror(
+                "unable to connect to database. Check the SQL server or database name to match")
+        c = con.cursor(pymysql.cursors.DictCursor)
+        query = '''
+                   SELECT
+                   *
+                   FROM
+                   wp_posts i
+                   WHERE i.post_type = 'attachment' 
+                   
+
+                 '''
+#AND i.post_mime_type LIKE CONCAT('%','application','%')
+        c.execute(query)
+        # data = c.fetchmany(1000)
+        # print(data)
+        for row in c.fetchall():
+            yield (row)
+        c.close()
+        con.close()
 
     '''input : root_folder, folder_hold_sql_file
         output : 
@@ -52,7 +106,8 @@ class database():
             image_name = re.findall("([^\/]*.(?:jpg|gif|png|jpeg))", image_url)[0]
         except:
             err=traceback.format_exc()
-            err_msg=f"issue with extracting image name: \nstatement :  image_name=re.findall('([^\/]*.(?:jpg|gif|png|jpeg))', image_url)[0]\nsource: {image_url}"
+            err_msg=f"issue with extracting image name: \nstatement :  image_name=re.findall('([^\/]*.(?:jpg|gif|png|jpeg))', image_url)[0]\nsource: {image_url}\n{err}"
+            tkinter.messagebox.showerror("extract_image_name function",err_msg)
             # print(f"issue with extracting image name: \n"
             #       f"statement :  image_name=re.findall('([^\/]*.(?:jpg|gif|png|jpeg))', image_url)[0]\n"
             #       f"source: {image_url}"
@@ -145,6 +200,7 @@ class database():
                         yield user_image
                     except Exception as err:
                         err_msg =f"error in extracting image using user id: {err.__traceback__}\nworking on value data: {info}\n maybe that row doesn't have image information"
+                        tkinter.messagebox.showerror("error", err_msg)
                         # print(
                         #     f"error in extracting image using user id: {err.__traceback__}\nworking on value data: {info}\n maybe that row doesn't have image information")
     '''Description: call user_image_from_sql_file() to get the infor of image associate with user in multiple sql files
@@ -182,7 +238,7 @@ class database():
                     except Exception as err:
                         err_msg=f"error in extracting image using user id: {err.__traceback__}\nworking on value data: {info}"
                         # print(f"error in extracting image using user id: {err.__traceback__}\nworking on value data: {info}")
-
+                        tkinter.messagebox.showerror("extract_image_name function", err_msg)
 
     ''' all the images in database generator 
         TODO: depreciated'''
@@ -233,6 +289,7 @@ class database():
 
     def filter_image_used_by_job_post(self,images_folder, sql_folder):
         for image_info in self.find_feature_image_in_sql(sql_folder,"latin"):
+            print("image_info : ", image_info)
             img_relative_path = image_info["image_relative_path"]
             image_info["img_path_structure_in_file"] = img_relative_path
             img_relative_path_window = img_relative_path.replace("/","\\") #convert to window format
@@ -241,6 +298,7 @@ class database():
                     img_name = re.findall(r"([^\\]*.(?:jpg|gif|png|jpeg))", img_relative_path_window)[0]
             except:
                 err_msg= "\nIssue in filter_image-used_by_job_post: \n{}other details\nstatement: img_name = re.findall(r'([^\\]*.(?:jpg|gif|png|jpeg))', img_relative_path_window)[0]\nsource: {}\nsource type: {}\nregex result : {}".format(traceback.format_exc(),img_relative_path_window,type(img_relative_path_window),re.findall(r'([^\\]*.(?:jpg|gif|png|jpeg))', img_relative_path_window))
+                tkinter.messagebox.showerror("Error", err_msg)
                 #print(img_relative_path_window)
             #use img_relative_path_window to find the image location
             for root, subdir, files in os.walk(images_folder):
@@ -268,9 +326,11 @@ class database():
                             shutil.copy(image_abs_path, file_dest)
                         except shutil.SameFileError:
                             err = traceback.format_exc()
+                            tkinter.messagebox.showerror("Error",  f"some error 1 {err}")
                             #print("same file same path was copied")
                         except:
                             err = traceback.format_exc()
+                            tkinter.messagebox.showerror("Error", f"some error 2{err}")
                             #print(err)
             # '''for manual testing'''
             # parrent_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -296,6 +356,7 @@ class database():
                             info = [term.strip() for term in row.split(',')]
                             if info is not None:
                                 feature_image_info = {"image_id": info[1], "image_relative_path": info[3].replace("'", ""), "source_row": row, "file_use_image": sql_file}
+                                print("feature image: ", feature_image_info)
                                 yield feature_image_info
 
 
@@ -348,9 +409,11 @@ class database():
                                 shutil.copy(img_100_path, file_dest)
                         except shutil.SameFileError:
                             err = traceback.format_exc()
+                            tkinter.messagebox.showerror("Error", f"some error 3{err}")
                             # print("same file same path was copied")
                         except:
                             err = traceback.format_exc()
+                            tkinter.messagebox.showerror("Error", f"some error 4{err}")
                             # print(err)
 
             '''for manual testing'''

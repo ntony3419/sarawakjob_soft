@@ -40,7 +40,9 @@ def find_replace_phrase(folder, old_text, new_text):
                     f = open(file_path,errors='ignore')
                     for line in f:
                         if old_text in line:
+                            old_line=line
                             line=line.replace(old_text, new_text)
+                            print(f"replacing\nold_text: {old_text} to \nnew_text: {new_text} in \nsource: {old_line}\nresult: {line}\n")
                         new_content.append(line)
                     f.close()
                 except:

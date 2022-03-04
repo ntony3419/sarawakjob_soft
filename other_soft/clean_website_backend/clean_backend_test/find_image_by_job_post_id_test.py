@@ -8,4 +8,6 @@ dir = directory()
 '''init save file'''
 
 db.init_save_file_job_image()
-db.filter_image_used_by_job_post(r"D:\sarawakjobs\duplicatedemo.notesquare.com_origin\duplicatedemo.notesquare.com_edit",r"D:\sarawakjobs\duplicatedemo.notesquare.com_origin\folder hold database files")
+root_folder = r"D:\sarawakjobs\JobsBrunei_Quang_origin_with_upload_folder\JobsBrunei_Quang\CMS_for_jobsbrunei_com"
+database_folder = r"D:\sarawakjobs\JobsBrunei_Quang_origin_with_upload_folder\JobsBrunei_Quang\singapur_jobsbrunei01_sql"
+db.filter_image_used_by_job_post(root_folder,database_folder)
