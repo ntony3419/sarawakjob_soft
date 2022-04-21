@@ -124,7 +124,7 @@ def determine_codec(file_path):
 
 #print(determine_codec(r"D:\duplicatedemo.notesquare.com - original\duplicatedemo.notesquare.com_edit\wp-comments-post.php"))
 #find_replace_phrase(r"D:\duplicatedemo.notesquare.com\home\wp-content\themes\sjobsv2", "msia.notesquare.com","duplicatedemo.notesquare.com")
-find_replace_phrase(r"D:\sarawakjobs\JobsBrunei Quang\JobsBrunei Quang\CMS for jobsbrunei.com", "www.jobsbrunei.com","jbdemo.notesquare.com")
+#find_replace_phrase(r"D:\sarawakjobs\JobsBrunei Quang\JobsBrunei Quang\CMS for jobsbrunei.com", "www.jobsbrunei.com","jbdemo.notesquare.com")
 #search_file_contain_keyword(r"D:\duplicatedemo.notesquare.com - original\duplicatedemo.notesquare.com_edit\home\wp-content\themes\sjobsv2", "Keyword: Admin")
 #find_phrase_in_folder(r"D:\duplicatedemo.notesquare.com - original\duplicatedemo.notesquare.com_edit", "user_custom_avatar_id")
 #search_file_contain_keyword(r"C:\Users\quang nguyen\Downloads\test_text", "column-search")
